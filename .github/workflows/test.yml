@@ -1,0 +1,54 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  acme-walkthrough:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout examples
+        uses: actions/checkout@v4
+        with:
+          path: examples
+
+      - name: Checkout sdk-python (sibling, dev install)
+        uses: actions/checkout@v4
+        with:
+          repository: openagp/sdk-python
+          path: sdk-python
+
+      - name: Checkout spec (sibling, for schemas + fixtures)
+        uses: actions/checkout@v4
+        with:
+          repository: openagp/spec
+          path: spec
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install SDK from sibling source + pytest
+        run: |
+          set -euxo pipefail
+          pip install --upgrade pip
+          # install from sibling source so we test against current SDK, not last-published
+          pip install -e ./sdk-python
+          pip install pytest
+
+      - name: Run the Acme walkthrough demo
+        working-directory: examples/acme-walkthrough
+        run: python demo.py
+
+      - name: Run example tests
+        working-directory: examples
+        run: pytest tests/ -v
