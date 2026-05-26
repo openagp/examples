@@ -38,6 +38,20 @@ pytest tests/
 
 Examples have CI smoke tests that fail when the SDK or spec drift in a way that breaks the demo.
 
+## Adding an example
+
+New examples are welcome — they're often the clearest way for a new contributor to learn the protocol.
+
+1. Pick a slot from the "*coming*" rows in the table above, or propose a new one via a [Feature request](https://github.com/openagp/examples/issues/new?template=feature_request.yml).
+2. Make it self-contained: a `Makefile` with a `demo` target and a short README explaining the scenario.
+3. Sign every artifact with the SDK (no hand-rolled crypto).
+4. Add a smoke test under `tests/` that fails if the demo's output stops matching expectations.
+5. Document which conformance level (L1 / L2 / L3) the example exercises.
+
+## Contributing
+
+See [CONTRIBUTING.md](https://github.com/openagp/.github/blob/main/CONTRIBUTING.md) at the org level for DCO sign-off and PR conventions, and [SUPPORT.md](https://github.com/openagp/.github/blob/main/SUPPORT.md) for where to ask questions or file bugs.
+
 ## License
 
 [Apache-2.0](LICENSE).
